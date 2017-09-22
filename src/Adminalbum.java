@@ -18,19 +18,20 @@ import java.util.ArrayList;
  */
 public class Adminalbum {
 
-    protected ArrayList<Albums> lista = new ArrayList();
-    protected File archivo = null;
-    
+    ArrayList<Albums> listaalbum = new ArrayList();
+    File archivo = null;
+
+
     public Adminalbum(String path) {
         archivo = new File(path);
     }
 
-    public ArrayList<Albums> getLista() {
-        return lista;
+    public ArrayList<Albums> getListaAlbum() {
+        return listaalbum;
     }
 
-    public void setLista(ArrayList<Albums> lista) {
-        this.lista = lista;
+    public void setListaAlbum(ArrayList<Albums> listaalbum) {
+        this.listaalbum = listaalbum;
     }
 
     public File getArchivo() {
@@ -41,40 +42,41 @@ public class Adminalbum {
         this.archivo = archivo;
     }
 
-    @Override
-    public String toString() {
-        return "Adminalbum{" + "lista=" + lista + ", archivo=" + archivo + '}';
+
+    //extra mutador
+    public void setAlbum(Albums p) {
+        this.listaalbum.add(p);
     }
-    
-     public ArrayList<Albums> CargarArchivo() {
+
+    public void cargarArchivo() {
         try {
-            lista = new ArrayList();
+            listaalbum = new ArrayList();
             Albums temp;
             if (archivo.exists()) {
                 FileInputStream entrada = new FileInputStream(archivo);
                 ObjectInputStream objeto = new ObjectInputStream(entrada);
                 try {
                     while ((temp = (Albums) objeto.readObject()) != null) {
-                        lista.add(temp);
+                        listaalbum.add(temp);
                     }
                 } catch (EOFException e) {
+                    //encontro el final del archivo
                 }
                 objeto.close();
                 entrada.close();
-            }
+            }//fin if
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return lista;
     }
-    
-     public void EscribirArchivo() {
+
+    public void escribirArchivo() {
         FileOutputStream fw = null;
         ObjectOutputStream bw = null;
         try {
             fw = new FileOutputStream(archivo);
             bw = new ObjectOutputStream(fw);
-            for (Albums t : lista) {
+            for (Albums t : listaalbum) {
                 bw.writeObject(t);
             }
             bw.flush();
@@ -87,4 +89,5 @@ public class Adminalbum {
             }
         }
     }
+
 }
